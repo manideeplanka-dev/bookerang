@@ -9,7 +9,7 @@ import java.util.Date;
 public class JwtUtils {
 
     public static String createToken(String username) {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
         return JWT.create().withSubject(username)
                 .withIssuedAt(new Date())
