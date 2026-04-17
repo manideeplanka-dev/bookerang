@@ -9,7 +9,7 @@ public class DatabaseConfig {
 
 
     public static Jdbi getJdbi() {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         HikariConfig config = new HikariConfig();
         config.setUsername(dotenv.get("DB_USERNAME"));
         config.setPassword(dotenv.get("DB_PASSWORD"));

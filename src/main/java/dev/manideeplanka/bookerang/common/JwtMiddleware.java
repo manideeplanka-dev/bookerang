@@ -9,7 +9,7 @@ import io.javalin.http.UnauthorizedResponse;
 
 public class JwtMiddleware {
     public static void validate(Context ctx) {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
         String authHeader = ctx.header("Authorization");
 
