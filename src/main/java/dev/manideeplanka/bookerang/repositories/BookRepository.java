@@ -18,16 +18,24 @@ public class BookRepository {
         return jdbi.inTransaction(handle -> {
             UUID authorId = handle.createUpdate("INSERT into authors (name) VALUES (:name)")
                     .bind("name", author)
-                    .executeAndReturnGeneratedKeys("author_id").mapTo(UUID.class).one();
+                    .executeAndReturnGeneratedKeys("author_id")
+                    .mapTo(UUID.class)
+                    .one();
 
 
-            UUID id = handle.createUpdate("INSERT into books (title, author_id) VALUES (:title, :authorId)").bind("title", title)
+            UUID id = handle.createUpdate("INSERT into books (title, author_id) VALUES (:title, :authorId)")
+                    .bind("title", title)
                     .bind("authorId", authorId)
-                    .executeAndReturnGeneratedKeys("book_id").mapTo(UUID.class).one();
+                    .executeAndReturnGeneratedKeys("book_id")
+                    .mapTo(UUID.class)
+                    .one();
 
-            UUID copyId = handle.createUpdate("INSERT into copies (book_id, owner_id) VALUES (:bookId, :owner)").bind("bookId", id)
+            UUID copyId = handle.createUpdate("INSERT into copies (book_id, owner_id) VALUES (:bookId, :owner)")
+                    .bind("bookId", id)
                     .bind("owner", owner)
-                    .executeAndReturnGeneratedKeys("copy_id").mapTo(UUID.class).one();
+                    .executeAndReturnGeneratedKeys("copy_id")
+                    .mapTo(UUID.class)
+                    .one();
 
             return copyId.toString();
         });

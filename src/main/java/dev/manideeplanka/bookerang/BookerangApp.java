@@ -16,7 +16,7 @@ import io.javalin.http.HttpStatus;
 
 public class BookerangApp {
 
-    static void main() {
+    public static void main(String[] args) {
 
         UserRepository userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
