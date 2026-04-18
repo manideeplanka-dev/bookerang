@@ -1,7 +1,6 @@
 package dev.manideeplanka.bookerang.repositories;
 
 import dev.manideeplanka.bookerang.common.DatabaseConfig;
-import dev.manideeplanka.bookerang.models.Book;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.UUID;
