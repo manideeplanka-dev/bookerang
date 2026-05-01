@@ -15,24 +15,32 @@ public class BookRepository {
 
     public String addBook(String author, String title, String owner) {
         return jdbi.inTransaction(handle -> {
-            UUID authorId = handle.createUpdate("INSERT into authors (name) VALUES (:name)")
+            UUID authorId = handle.createQuery("""
+                            INSERT into authors (name) VALUES (:name)
+                            ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name
+                            RETURNING author_id
+                            """)
                     .bind("name", author)
-                    .executeAndReturnGeneratedKeys("author_id")
                     .mapTo(UUID.class)
                     .one();
 
 
-            UUID id = handle.createUpdate("INSERT into books (title, author_id) VALUES (:title, :authorId)")
+            UUID bookId = handle.createQuery("""
+                            INSERT into books (title, author_id) VALUES (:title, :authorId)
+                            ON CONFLICT (title) DO UPDATE SET title = EXCLUDED.title
+                            RETURNING book_id
+                            """)
                     .bind("title", title)
                     .bind("authorId", authorId)
-                    .executeAndReturnGeneratedKeys("book_id")
                     .mapTo(UUID.class)
                     .one();
 
-            UUID copyId = handle.createUpdate("INSERT into copies (book_id, owner_id) VALUES (:bookId, :owner)")
-                    .bind("bookId", id)
+            UUID copyId = handle.createQuery("""
+                            INSERT into copies (book_id, owner_id) VALUES (:bookId, :owner)
+                            RETURNING copy_id
+                            """)
+                    .bind("bookId", bookId)
                     .bind("owner", owner)
-                    .executeAndReturnGeneratedKeys("copy_id")
                     .mapTo(UUID.class)
                     .one();
 
